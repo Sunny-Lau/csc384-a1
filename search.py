@@ -125,7 +125,7 @@ def breadthFirstSearch(problem):
                 newPath = path + [succ]
                 newCost = sum([c for (_, _, c) in newPath])
                 state = succ[0]
-                if state not in seen or newCost <= seen[state]:
+                if state not in seen or newCost < seen[state]:
                     queue.push(newPath)
                     seen[state] = newCost
     return []
