@@ -155,7 +155,7 @@ def uniformCostSearch(problem):
                 if state not in seen or newCost < seen[state]:
                     priQueue.push(newPath, newCost)
                     seen[state] = newCost
-    return None
+    return []
 
 
 def nullHeuristic(state, problem=None):
@@ -167,7 +167,29 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    
+    startState = problem.getStartState()
+    starttuple = (startState, None, 0)
+    priQueue = util.PriorityQueue()
+    priQueue.push([starttuple], starttuple[2])
+    seen = {starttuple[0]: starttuple[2] + heuristic(startState, problem)}
+
+    while not priQueue.isEmpty():
+        path = priQueue.pop()
+        (endState, _, _) = path[-1]
+        actions = [action for (_, action, _) in path[1:]]
+        cost = sum([c for (_, _, c) in path[1:]])
+
+        if cost <= seen[endState]:
+            if problem.isGoalState(endState):
+                return actions
+            for succ in problem.getSuccessors(endState):
+                newPath = path + [succ]
+                newCost = sum([c for (_, _, c) in newPath])
+                state = succ[0]
+                if state not in seen or newCost < seen[state]:
+                    priQueue.push(newPath, newCost + heuristic(state, problem))
+                    seen[state] = newCost
+    return []
 
 
 # Abbreviations
