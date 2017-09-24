@@ -133,41 +133,28 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    startState = (problem.getStartState(), None)
+    startState = problem.getStartState()
+    starttuple = (startState, None, 0)
     priQueue = util.PriorityQueue()
-    priQueue.push([startState], 0)
-
-    print startState
+    priQueue.push([starttuple], starttuple[2])
+    seen = {starttuple[0]: starttuple[2]}
 
     while not priQueue.isEmpty():
         path = priQueue.pop()
+        (endState, _, _) = path[-1]
+        actions = [action for (_, action, _) in path[1:]]
+        cost = sum([c for (_, _, c) in path[1:]])
 
-        print path
-
-        (endState, _) = path[-1]
-        actions = [action for (_, action) in path[1:]]
-        print actions
-        if problem.isGoalState(endState):
-
-            print actions
-
-            return actions # fix this later
-
-        succQueue = util.PriorityQueueWithFunction(problem.costFn)
-        stateDict = {}
-        for (state, action, _) in problem.getSuccessors(endState):
-            print state
-            stateDict[state] = action
-            succQueue.push(state)
-
-        bestSucc = succQueue.pop()
-        print stateDict
-        print bestSucc
-        item = (bestSucc, stateDict[bestSucc])
-        newCost = problem.getCostOfActions(actions + [stateDict[bestSucc]])
-        print newCost
-        priQueue.push(path + [item], newCost)
-
+        if cost <= seen[endState]:
+            if problem.isGoalState(endState):
+                return actions
+            for succ in problem.getSuccessors(endState):
+                newPath = path + [succ]
+                newCost = sum([c for (_, _, c) in newPath])
+                state = succ[0]
+                if state not in seen or newCost < seen[state]:
+                    priQueue.push(newPath, newCost)
+                    seen[state] = newCost
     return None
 
 
@@ -180,8 +167,7 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    
 
 
 # Abbreviations
