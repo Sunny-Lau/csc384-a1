@@ -377,11 +377,12 @@ def cornersHeuristic(state, problem):
     
     distances = []
     stateX, stateY, been = state
-    for i in been:
-        if i == 0:
+    for i in range(4):
+        if been[i] == 0:
             cornerX, cornerY = corners[i]
-            d = abs(stateX - cornerX) + abs(stateX - stateY)
+            d = abs(stateX - cornerX) + abs(stateY - stateY)
             distances.append(d)
+
     if distances:
         return min(distances)
 
