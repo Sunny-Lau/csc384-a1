@@ -375,19 +375,42 @@ def cornersHeuristic(state, problem):
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
     
-    distances = []
-    stateX, stateY, been = state
-    for i in range(4):
-        if been[i] == 0:
-            cornerX, cornerY = corners[i]
-            d = abs(stateX - cornerX) + abs(stateY - stateY)
-            distances.append(d)
+    # distances = []
+    # stateX, stateY, been = state
+    # for i in range(4):
+    #     if been[i] == 0:
+    #         cornerX, cornerY = corners[i]
+    #         d = abs(stateX - cornerX) + abs(stateY - cornerY)
+    #         distances.append(d)
 
-    if distances:
-        return min(distances)
+    # if distances:
+    #     return min(distances)
+    # ----------- above gives 1476 spaning nodes ------------------
 
     "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    stateX, stateY, been = state
+    cornersLeft = [corners[i] for i in range(4) if been[i] == 0]
+
+    total = 0
+    currentLocation = (stateX, stateY)
+    while cornersLeft:
+        corner = closestCorner(currentLocation, cornersLeft)
+        total += manhattanDistance(currentLocation, corner)
+        cornersLeft.remove(corner)
+
+    return total
+
+def closestCorner(currentLocation, cornersLeft):
+    """ return the closest Corner in corner problem to the current location"""
+    distances = [manhattanDistance(currentLocation, c) for c in cornersLeft]
+    index = distances.index(min(distances))
+    return cornersLeft[index]
+
+
+def manhattanDistance(pointA, pointB):
+    """ get manhattan distnace from pointA to pointB"""
+    return abs(pointA[0] - pointB[0]) + abs(pointA[1] - pointB[1])
+
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
