@@ -116,11 +116,13 @@ def breadthFirstSearch(problem):
     while not queue.isEmpty():
         path = queue.pop()
         (endState, _, _) = path[-1]
-        actions = [action for (_, action, _) in path]
-        cost = sum([c for (_, _, c) in path])
+        actions = [action for (_, action, _) in path[1:]]
+        cost = sum([c for (_, _, c) in path[1:]])
+        # print actions
         if cost <= seen[endState]:
             if problem.isGoalState(endState):
-                return actions[1:]
+                # print actions ##
+                return actions
             for succ in problem.getSuccessors(endState):
                 newPath = path + [succ]
                 newCost = sum([c for (_, _, c) in newPath])
@@ -128,7 +130,7 @@ def breadthFirstSearch(problem):
                 if state not in seen or newCost < seen[state]:
                     queue.push(newPath)
                     seen[state] = newCost
-    return []
+    return None
 
 
 def uniformCostSearch(problem):
