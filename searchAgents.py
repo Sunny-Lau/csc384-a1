@@ -385,6 +385,7 @@ def cornersHeuristic(state, problem):
 
     # if distances:
     #     return min(distances)
+    # return 0
     # ----------- above gives 1476 spaning nodes ------------------
 
     "*** YOUR CODE HERE ***"
@@ -397,9 +398,13 @@ def cornersHeuristic(state, problem):
         corner = closestCorner(currentLocation, cornersLeft)
         total += manhattanDistance(currentLocation, corner)
         cornersLeft.remove(corner)
-
+        currentLocation = corner
     return total
+    # ----------- above gives 693 spaning nodes -------------------
 
+
+
+############# Help functions ###################
 def closestCorner(currentLocation, cornersLeft):
     """ return the closest Corner in corner problem to the current location"""
     distances = [manhattanDistance(currentLocation, c) for c in cornersLeft]
@@ -411,6 +416,7 @@ def manhattanDistance(pointA, pointB):
     """ get manhattan distnace from pointA to pointB"""
     return abs(pointA[0] - pointB[0]) + abs(pointA[1] - pointB[1])
 
+################################################
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
