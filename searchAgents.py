@@ -395,7 +395,7 @@ def cornersHeuristic(state, problem):
     total = 0
     currentLocation = (stateX, stateY)
     while cornersLeft:
-        corner = closestCorner(currentLocation, cornersLeft)
+        corner = closestPoint(currentLocation, cornersLeft)
         total += manhattanDistance(currentLocation, corner)
         cornersLeft.remove(corner)
         currentLocation = corner
@@ -405,11 +405,11 @@ def cornersHeuristic(state, problem):
 
 
 ############# Help functions ###################
-def closestCorner(currentLocation, cornersLeft):
+def closestPoint(currentLocation, Points):
     """ return the closest Corner in corner problem to the current location"""
-    distances = [manhattanDistance(currentLocation, c) for c in cornersLeft]
+    distances = [manhattanDistance(currentLocation, c) for c in Points]
     index = distances.index(min(distances))
-    return cornersLeft[index]
+    return Points[index]
 
 
 def manhattanDistance(pointA, pointB):
@@ -508,7 +508,41 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    # foodList = foodGrid.asList()
+    # distances = []
+    # for f in foodList:
+    #     distances.append(manhattanDistance(position, f))
+
+    # if distances:
+    #     return min(distances)
+    # return 0
+
+    # ---- above gives 13898 ----
+
+    # foodList = [f for f in foodGrid.asList()]
+
+    # total = 0
+    # currentLocation = position
+    # while foodList:
+    #     food = closestPoint(currentLocation, foodList)
+    #     total += manhattanDistance(currentLocation, food)
+    #     foodList.remove(food)
+    #     currentLocation = food
+    # return total
+    # ---- This gives 6273 spaning nodes! ---- Not admissible ?
+
+    # trival heuristic gives 16688
+
+    foodList = foodGrid.asList()
+
+    max_distance = 0
+    for food in foodList:
+        distance = mazeDistance(position, food, problem.startingGameState)
+        if distance > max_distance:
+            max_distance = distance 
+
+    return max_distance
+
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -539,7 +573,8 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # util.raiseNotDefined()
+        return search.breadthFirstSearch(problem)
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -575,7 +610,9 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # util.raiseNotDefined()
+        return self.food[x][y]
+        
 
 def mazeDistance(point1, point2, gameState):
     """
