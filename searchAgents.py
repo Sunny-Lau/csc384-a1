@@ -374,34 +374,17 @@ def cornersHeuristic(state, problem):
     """
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
-    
-    # distances = []
-    # stateX, stateY, been = state
-    # for i in range(4):
-    #     if been[i] == 0:
-    #         cornerX, cornerY = corners[i]
-    #         d = abs(stateX - cornerX) + abs(stateY - cornerY)
-    #         distances.append(d)
-
-    # if distances:
-    #     return min(distances)
-    # return 0
-    # ----------- above gives 1476 spaning nodes ------------------
-
     "*** YOUR CODE HERE ***"
+
+    max_distance = 0
     stateX, stateY, been = state
-    cornersLeft = [corners[i] for i in range(4) if been[i] == 0]
-
-    total = 0
-    currentLocation = (stateX, stateY)
-    while cornersLeft:
-        corner = closestPoint(currentLocation, cornersLeft)
-        total += manhattanDistance(currentLocation, corner)
-        cornersLeft.remove(corner)
-        currentLocation = corner
-    return total
-    # ----------- above gives 693 spaning nodes -------------------
-
+    for i in range(4):
+        if been[i] == 0:
+            cornerX, cornerY = corners[i]
+            d = manhattanDistance((stateX, stateY), corners[i])
+            if d > max_distance:
+                max_distance = d
+    return max_distance
 
 
 ############# Help functions ###################
@@ -508,19 +491,8 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    # foodList = foodGrid.asList()
-    # distances = []
-    # for f in foodList:
-    #     distances.append(manhattanDistance(position, f))
-
-    # if distances:
-    #     return min(distances)
-    # return 0
-
-    # ---- above gives 13898 ----
 
     # foodList = [f for f in foodGrid.asList()]
-
     # total = 0
     # currentLocation = position
     # while foodList:
@@ -529,19 +501,21 @@ def foodHeuristic(state, problem):
     #     foodList.remove(food)
     #     currentLocation = food
     # return total
-    # ---- This gives 6273 spaning nodes! ---- Not admissible ?
-
-    # trival heuristic gives 16688
+    # ---- This gives 6273 spaning nodes! ---- Why not admissible ?
 
     foodList = foodGrid.asList()
 
-    max_distance = 0
-    for food in foodList:
-        distance = mazeDistance(position, food, problem.startingGameState)
-        if distance > max_distance:
-            max_distance = distance 
+    left_max_distance = 0
+    right_max_distance = 0
 
-    return max_distance
+    for food in foodList:
+        d = manhattanDistance(food, position)
+        if food[0] <= position[0] and d > left_max_distance:
+            left_max_distance = d
+        elif food[0] > position[0] and d > right_max_distance:
+            right_max_distance = d
+            
+    return left_max_distance + right_max_distance
 
 
 class ClosestDotSearchAgent(SearchAgent):
