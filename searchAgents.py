@@ -514,7 +514,7 @@ def foodHeuristic(state, problem):
             left_max_distance = d
         elif food[0] > position[0] and d > right_max_distance:
             right_max_distance = d
-            
+
     return left_max_distance + right_max_distance
 
 
