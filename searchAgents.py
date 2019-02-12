@@ -297,15 +297,12 @@ class CornersProblem(search.SearchProblem):
         """
         x, y = self.startingPosition
         return (x, y, (0, 0, 0, 0))
-        # util.raiseNotDefined()
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        # print state
         return state[2] == (1, 1, 1, 1)
-        # util.raiseNotDefined()
 
     def getSuccessors(self, state):
         """
@@ -318,9 +315,6 @@ class CornersProblem(search.SearchProblem):
             is the incremental cost of expanding to that successor
         """
         successors = []
-        # if coordinates in self.corners and self.cornersLeft[coordinates]:
-        #     self.cornersLeft[coordinates] = False
-
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
@@ -336,9 +330,7 @@ class CornersProblem(search.SearchProblem):
                     index = self.corners.index(nextState)
                     new_been = list(been)
                     new_been[index] = 1
-                    # print new_been
                     successors.append(((nextx, nexty, tuple(new_been)), action, cost))
-                    # self.cornersLeft[nextState] = False
                 else:
                     successors.append(((nextx, nexty, been), action, cost))
 
@@ -491,18 +483,6 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-
-    # foodList = [f for f in foodGrid.asList()]
-    # total = 0
-    # currentLocation = position
-    # while foodList:
-    #     food = closestPoint(currentLocation, foodList)
-    #     total += manhattanDistance(currentLocation, food)
-    #     foodList.remove(food)
-    #     currentLocation = food
-    # return total
-    # ---- This gives 6273 spaning nodes! ---- Why not admissible ?
-
     foodList = foodGrid.asList()
 
     left_max_distance = 0
@@ -547,7 +527,6 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        # util.raiseNotDefined()
         return search.breadthFirstSearch(problem)
 
 class AnyFoodSearchProblem(PositionSearchProblem):
@@ -584,7 +563,6 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
-        # util.raiseNotDefined()
         return self.food[x][y]
         
 
