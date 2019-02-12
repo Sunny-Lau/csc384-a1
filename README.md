@@ -2,6 +2,8 @@
 
 This assignment is based on *UC Berkely Pacman AI project*.
 
+![pacman](./pacman.png)
+
 In [search.py](./search.py), we implemented uniform cost, BFS, DFS, and A* search algorithm.
 
 In [searchAgents.py](./searchAgents.py), we defined a few problems we need to solve, such as Corners Problem(reaching all four corners on the game board), and Food Search Problem(eating all the food on the game board).
